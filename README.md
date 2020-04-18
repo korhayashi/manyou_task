@@ -1,28 +1,16 @@
-<<<<<<< HEAD
-# README
+### Userテーブル
+  - id (int)  
+  - name (str)  
+  - email (str)  
+  - password_digest (str)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### Taskテーブル
+  - id (int)  
+  - name (str)  
+  - detail (text)
+  - priority (str)
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-=======
-# manyou_task
->>>>>>> origin/master
+### Labelテーブル
+  - id (int)  
+  - user_id (int)(FK)  
+  - task_id (int)(FK)
