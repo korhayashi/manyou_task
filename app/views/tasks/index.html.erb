@@ -2,7 +2,7 @@
 <% @tasks.each do |task| %>
   <div class="task">
     <div class="task_header">
-      <h4 class="task_name"><%= task.name %></h4>
+      <h4 class="task_name task_row"><%= task.name %></h4>
       <%= link_to '詳細', task_path(task.id), class: 'task_show' %>
       <%= link_to '編集', edit_task_path(task.id) %>
       <%= link_to '削除', task_path(task.id), method: :delete, data: { confirm: '削除してよろしいですか？' } %>
