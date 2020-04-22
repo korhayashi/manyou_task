@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
 
   def index
-    @tasks = Task.all
+    @tasks = Task.all.order(created_at: :desc)
   end
 
   def new
@@ -12,7 +12,7 @@ class TasksController < ApplicationController
   def create
     @task = Task.new(task_params)
     if @task.save
-      redirect_to tasks_path, notice: '新しいタスクを登録しました'
+      redirect_to root_path, notice: '新しいタスクを登録しました'
     else
       render :new
     end
