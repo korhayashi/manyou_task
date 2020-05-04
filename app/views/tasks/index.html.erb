@@ -1,4 +1,6 @@
 <%= link_to '新規タスク登録', new_task_path %>
+<div class="sort">
+</div>
 <% @tasks.each do |task| %>
   <div class="task">
     <div class="task_header">
@@ -9,6 +11,9 @@
     </div>
     <div class="task_detail">
       <%= task.detail %>
+    </div>
+    <div class="task_deadline">
+      <%= task.deadline %>
     </div>
   </div>
 <% end %>

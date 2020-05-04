@@ -19,12 +19,11 @@
     </div>
     <div class="form_deadline">
       <%= f.label :deadline, '終了期限' %>
-      <%= f.datetime_select
-        :deadline,
+      <%= f.datetime_select :deadline,
         use_month_numbers: true,
         start_year: Time.current.year,
         end_year: Time.current.year + 10,
-        default: Time.current.year,
+        default: DateTime.now,
         date_separator: '/'
       %>
     </div>
