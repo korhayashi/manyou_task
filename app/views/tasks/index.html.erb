@@ -1,5 +1,10 @@
 <%= link_to '新規タスク登録', new_task_path %>
 <div class="sort">
+  <%= form_with(url: sort_tasks_path, local: true) do |f| %>
+    <%= select_tag :sort, options_for_select([["投稿が新しい順","created_at"],["終了期限が早い順","deadline"]]),
+      { prompt: '並べ替え' } %>
+    <%= submit_tag "絞り込み" %>
+  <% end %>
 </div>
 <% @tasks.each do |task| %>
   <div class="task">

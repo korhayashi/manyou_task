@@ -2,6 +2,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
 
   def index
+    @task = Task.new
     @tasks = Task.all.order(created_at: :desc)
   end
 
@@ -35,6 +36,17 @@ class TasksController < ApplicationController
   def destroy
     @task.destroy
     redirect_to tasks_path, notice: 'タスクを削除しました'
+  end
+
+  def sort
+    @tasks =
+      if params[:sort].present?
+        Task.all.order(params[:sort]: :desc)
+      else
+        Task.all.order(created_at: :desc)
+      end
+
+      render :index
   end
 
   private
