@@ -36,6 +36,20 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(task_list[1]).to have_content 'task'
       end
     end
+    context '終了期限を昇順にソート' do
+      it 'タスクが終了期限の昇順に並んでいる' do
+        # あらかじめタスク並び替えの確認テストで使用するためのタスクを二つ作成する
+        new_task = FactoryBot.create(:second_task, name: 'slow_task')
+        visit root_path
+        # ソートのプルダウンを終了期限が早い順に指定
+        # binding.irb
+        select '終了期限が早い順', from: 'sort'
+        click_button 'ソート'
+        task_list = all('.task_row') # タスク一覧を配列として取得するため、View側でidを振っておく
+        expect(task_list[0]).to have_content 'task'
+        expect(task_list[1]).to have_content 'slow_task'
+      end
+    end
   end
   describe 'タスク登録画面' do
     context '必要項目を入力して、createボタンを押した場合' do

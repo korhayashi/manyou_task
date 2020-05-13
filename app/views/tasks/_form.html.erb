@@ -27,6 +27,9 @@
         date_separator: '/'
       %>
     </div>
+    <div class="form_status">
+      <%= f.select :status, Task.statuses.keys %>
+    </div>
     <div class="form_submit">
       <%= f.submit '登録' %>
     </div>

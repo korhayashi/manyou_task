@@ -12,6 +12,7 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
+    binding.irb
     if @task.save
       redirect_to root_path, notice: '新しいタスクを登録しました'
     else
@@ -40,10 +41,10 @@ class TasksController < ApplicationController
 
   def sort
     @tasks =
-      if params[:sort].present?
-        Task.all.order(params[:sort]: :desc)
-      else
+      if params[:sort] == 'created_at'
         Task.all.order(created_at: :desc)
+      elsif params[:sort] == 'deadline'
+        Task.all.order(deadline: :asc)
       end
 
       render :index
@@ -55,7 +56,8 @@ class TasksController < ApplicationController
     params.require(:task).permit(
       :name,
       :detail,
-      :deadline
+      :deadline,
+      :status
     )
   end
 
