@@ -50,6 +50,22 @@ class TasksController < ApplicationController
       render :index
   end
 
+  def search
+    # binding.irb
+    @tasks =
+    if params[:search_word].blank? && params[:search_status].blank?
+      Task.all.order(created_at: :desc)
+    elsif params[:search_word].present? && params[:search_status].present?
+      Task.where('name LIKE ?', "%#{params[:search_word]}%").where(status: params[:search_status]).order(created_at: :desc)
+    elsif params[:search_word].present? && params[:search_status].blank?
+      Task.where('name LIKE ?', "%#{params[:search_word]}%").order(created_at: :desc)
+    elsif params[:search_word].blank? && params[:search_status].present?
+      Task.where(status: params[:search_status]).order(created_at: :desc)
+    end
+
+    render :index
+  end
+
   private
 
   def task_params

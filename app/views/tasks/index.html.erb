@@ -1,3 +1,12 @@
+<div class="search_form">
+  <%= form_with(url: search_tasks_path, method: :get, local: true) do %>
+    <%= text_field_tag :search_word %>
+    <%= select_tag :search_status, options_for_select([['未着手', 0],['着手中', 1],['完了', 2]]),
+      { class: 'search_select', prompt: 'ステータス' } %>
+    <%= submit_tag '検索' %>
+  <% end %>
+</div>
+
 <%= link_to '新規タスク登録', new_task_path %>
 <div class="sort">
   <%= form_with(url: sort_tasks_path, local: true) do |f| %>
@@ -6,22 +15,26 @@
     <%= submit_tag "ソート" %>
   <% end %>
 </div>
-<% @tasks.each do |task| %>
-  <div class="task">
-    <div class="task_header">
-      <div class="task_status">
-        <%= task.status %>
+<% if @tasks.present? %>
+  <% @tasks.each do |task| %>
+    <div class="task">
+      <div class="task_header">
+        <div class="task_status">
+          <%= task.status %>
+        </div>
+        <h4 class="task_name task_row"><%= task.name %></h4>
+        <%= link_to '詳細', task_path(task.id), class: 'task_show' %>
+        <%= link_to '編集', edit_task_path(task.id) %>
+        <%= link_to '削除', task_path(task.id), method: :delete, data: { confirm: '削除してよろしいですか？' } %>
       </div>
-      <h4 class="task_name task_row"><%= task.name %></h4>
-      <%= link_to '詳細', task_path(task.id), class: 'task_show' %>
-      <%= link_to '編集', edit_task_path(task.id) %>
-      <%= link_to '削除', task_path(task.id), method: :delete, data: { confirm: '削除してよろしいですか？' } %>
+      <div class="task_detail">
+        <%= task.detail %>
+      </div>
+      <div class="task_deadline">
+        <%= task.deadline %>
+      </div>
     </div>
-    <div class="task_detail">
-      <%= task.detail %>
-    </div>
-    <div class="task_deadline">
-      <%= task.deadline %>
-    </div>
-  </div>
+  <% end %>
+<% else %>
+  <%= '検索結果に当てはまるタスクはありません' %>
 <% end %>
