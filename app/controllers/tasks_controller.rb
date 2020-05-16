@@ -54,13 +54,13 @@ class TasksController < ApplicationController
     # binding.irb
     @tasks =
     if params[:search_word].blank? && params[:search_status].blank?
-      Task.all.order(created_at: :desc)
+      Task.all.sorted
     elsif params[:search_word].present? && params[:search_status].present?
-      Task.where('name LIKE ?', "%#{params[:search_word]}%").where(status: params[:search_status]).order(created_at: :desc)
+      Task.search_sort(params[:serch_word]).status_sort(params[:search_status]).sorted
     elsif params[:search_word].present? && params[:search_status].blank?
-      Task.where('name LIKE ?', "%#{params[:search_word]}%").order(created_at: :desc)
+      Task.search_sort(params[:serch_word]).sorted
     elsif params[:search_word].blank? && params[:search_status].present?
-      Task.where(status: params[:search_status]).order(created_at: :desc)
+      Task.status_sort(params[:search_status]).sorted
     end
 
     render :index

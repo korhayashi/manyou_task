@@ -23,6 +23,23 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page).to have_content 'task'
         # expectの結果が true ならテスト成功、false なら失敗として結果が出力される
       end
+      context 'scopeメソッドで検索をした場合' do
+        before do
+          task2 = FactoryBot.create(:second_task, name: 'task2')
+          task3 = FactoryBot.create(:third_task, name: 'task3')
+        end
+
+        it "scopeメソッドでタイトル検索ができる" do
+          visit root_path
+          expect(Task.get_by_taskname('task').count).to eq 1
+        end
+        it "scopeメソッドでステータス検索ができる" do
+          # ここに内容を記載する
+        end
+        it "scopeメソッドでタイトルとステータスの両方が検索できる" do
+          # ここに内容を記載する
+        end
+      end
     end
     context '複数のタスクを作成した場合' do
       it 'タスクが作成日時の降順に並んでいる' do

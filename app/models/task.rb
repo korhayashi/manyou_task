@@ -8,4 +8,11 @@ class Task < ApplicationRecord
     着手中: 1,
     完了: 2
   }
+
+  # created_atカラムを降順で取得する
+  scope :sorted, -> { order(created_at: :desc) }
+  # 着手の度合いでソート
+  scope :status_sort, -> (search_status){ where(status: search_status) }
+  # 検索ワードであいまい検索をしてソート
+  scope :search_sort, -> (search_word){ where('name LIKE ?', "%#{search_word}%") }
 end
