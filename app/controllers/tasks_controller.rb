@@ -12,7 +12,7 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    binding.irb
+    # binding.irb
     if @task.save
       redirect_to root_path, notice: '新しいタスクを登録しました'
     else
