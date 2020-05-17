@@ -53,14 +53,26 @@ class TasksController < ApplicationController
   def search
     # binding.irb
     @tasks =
-    if params[:search_word].blank? && params[:search_status].blank?
+    if params[:search_word].blank? && params[:search_status].blank? && params[:search_priority].blank?
       Task.all.sorted
-    elsif params[:search_word].present? && params[:search_status].present?
-      Task.search_sort(params[:serch_word]).status_sort(params[:search_status]).sorted
-    elsif params[:search_word].present? && params[:search_status].blank?
-      Task.search_sort(params[:serch_word]).sorted
-    elsif params[:search_word].blank? && params[:search_status].present?
-      Task.status_sort(params[:search_status]).sorted
+    elsif params[:search_word].present?
+      if params[:search_status].present? && params[:search_priority].present?
+        Task.search_sort(params[:search_word]).status_sort(params[:search_status]).priority_sort(params[:search_priority]).sorted
+      elsif params[:search_status].present? && params[:search_priority].blank?
+        Task.search_sort(params[:search_word]).status_sort(params[:search_status]).sorted
+      elsif params[:search_status].blank? && params[:search_priority].present?
+        Task.search_sort(params[:search_word]).priority_sort(params[:search_priority]).sorted
+      else
+        Task.search_sort(params[:search_word]).sorted
+      end
+    elsif params[:search_status].present?
+      if params[:search_priority].present?
+        Task.status_sort(params[:search_status]).priority_sort(params[:search_priority]).sorted
+      else
+        Task.status_sort(params[:search_status]).sorted
+      end
+    elsif params[:search_priority].present?
+      Task.priority_sort(params[:search_priority]).sorted
     end
 
     render :index

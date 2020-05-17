@@ -28,7 +28,12 @@
       %>
     </div>
     <div class="form_status">
+      <%= f.label :status, 'ステータス' %>
       <%= f.select :status, Task.statuses.keys %>
+    </div>
+    <div class="form_priority">
+      <%= f.label :priority, '優先度' %>
+      <%= f.select :priority, Task.priorities.keys %>
     </div>
     <div class="form_submit">
       <%= f.submit '登録' %>

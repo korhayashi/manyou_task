@@ -7,6 +7,7 @@ FactoryBot.define do
     detail { 'Factoryで作ったデフォルトのコンテント1' }
     deadline { DateTime.now }
     status { 0 }
+    priority { 0 }
   end
   # 作成するテストデータの名前を「second_task」とします
   # （存在しないクラス名の名前をつける場合、オプションで「このクラスのテストデータにしてください」と指定します）
@@ -15,6 +16,7 @@ FactoryBot.define do
     detail { 'Factoryで作ったデフォルトのコンテント2' }
     deadline { DateTime.now + 1 }
     status { 1 }
+    priority { 1 }
   end
 
   factory :third_task, class: Task do
@@ -22,5 +24,6 @@ FactoryBot.define do
     detail { 'Factoryで作ったデフォルトのコンテント3' }
     deadline { DateTime.now + 2 }
     status { 2 }
+    priority { 2 }
   end
 end
