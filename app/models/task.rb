@@ -23,4 +23,6 @@ class Task < ApplicationRecord
   scope :search_sort, -> (search_word){ where('name LIKE ?', "%#{search_word}%") }
   # 重要度でソート
   scope :priority_sort, -> (search_priority){ where(priority: search_priority) }
+  # kaminari関連
+  scope :kaminari, -> (kaminari_page){ page(kaminari_page).per(10) }
 end

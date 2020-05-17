@@ -3,7 +3,7 @@ class TasksController < ApplicationController
 
   def index
     @task = Task.new
-    @tasks = Task.all.order(created_at: :desc)
+    @tasks = Task.all.order(created_at: :desc).kaminari(params[:page])
   end
 
   def new
@@ -42,9 +42,9 @@ class TasksController < ApplicationController
   def sort
     @tasks =
       if params[:sort] == 'created_at'
-        Task.all.order(created_at: :desc)
+        Task.all.order(created_at: :desc).kaminari(params[:page])
       elsif params[:sort] == 'deadline'
-        Task.all.order(deadline: :asc)
+        Task.all.order(deadline: :asc).kaminari(params[:page])
       end
 
       render :index
@@ -54,25 +54,25 @@ class TasksController < ApplicationController
     # binding.irb
     @tasks =
     if params[:search_word].blank? && params[:search_status].blank? && params[:search_priority].blank?
-      Task.all.sorted
+      Task.all.sorted.kaminari(params[:page])
     elsif params[:search_word].present?
       if params[:search_status].present? && params[:search_priority].present?
-        Task.search_sort(params[:search_word]).status_sort(params[:search_status]).priority_sort(params[:search_priority]).sorted
+        Task.search_sort(params[:search_word]).status_sort(params[:search_status]).priority_sort(params[:search_priority]).sorted.kaminari(params[:page])
       elsif params[:search_status].present? && params[:search_priority].blank?
-        Task.search_sort(params[:search_word]).status_sort(params[:search_status]).sorted
+        Task.search_sort(params[:search_word]).status_sort(params[:search_status]).sorted.kaminari(params[:page])
       elsif params[:search_status].blank? && params[:search_priority].present?
-        Task.search_sort(params[:search_word]).priority_sort(params[:search_priority]).sorted
+        Task.search_sort(params[:search_word]).priority_sort(params[:search_priority]).sorted.kaminari(params[:page])
       else
-        Task.search_sort(params[:search_word]).sorted
+        Task.search_sort(params[:search_word]).sorted.kaminari(params[:page])
       end
     elsif params[:search_status].present?
       if params[:search_priority].present?
-        Task.status_sort(params[:search_status]).priority_sort(params[:search_priority]).sorted
+        Task.status_sort(params[:search_status]).priority_sort(params[:search_priority]).sorted.kaminari(params[:page])
       else
-        Task.status_sort(params[:search_status]).sorted
+        Task.status_sort(params[:search_status]).sorted.kaminari(params[:page])
       end
     elsif params[:search_priority].present?
-      Task.priority_sort(params[:search_priority]).sorted
+      Task.priority_sort(params[:search_priority]).sorted.kaminari(params[:page])
     end
 
     render :index

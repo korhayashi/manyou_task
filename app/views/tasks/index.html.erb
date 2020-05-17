@@ -43,3 +43,6 @@
 <% else %>
   <%= '検索結果に該当するタスクはありません' %>
 <% end %>
+<div class="page">
+  <%= paginate @tasks %>
+</div>
