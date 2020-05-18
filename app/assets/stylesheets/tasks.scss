@@ -1,12 +1,23 @@
+.container {
+  width: 50%;
+  margin: 30px auto;
+}
+
 .flash_message {
   color: gray;
 }
 
+.new_post {
+  margin: 30px 0;
+}
+
 .task {
-  width: 300px;
+  width: 400px;
+  margin: 30px 10px;
 }
 
 .task_header {
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
 
@@ -15,6 +26,29 @@
   }
 }
 
+.task_status {
+  font-size: 13px;
+  color: #e30e26;
+}
+
+.task_name {
+  margin: 0 5px;
+}
+
+.task_priority {
+  font-size: 13px;
+  color: #0c8741;
+}
+
 .task_show {
   margin-left: auto;
+}
+
+.page {
+  margin: 30px auto;
+}
+
+table {
+  width: 600px;
+  font-size: 15px;
 }

@@ -1,8 +1,28 @@
-<div class="task_show">
-  <h3 class="task_show_name">
-    <%= @task.name %>
-  </h3>
-  <div class="task_show_detail">
-    <%= @task.detail %>
-  </div>
+<div class="container">
+  <table>
+    <tr>
+      <th><%= 'タスク名' %></th>
+      <td><%= @task.name %></td>
+    </tr>
+    <tr>
+      <th><%= 'タスク詳細' %></th>
+      <td><%= @task.detail %></td>
+    </tr>
+    <tr>
+      <th><%= 'ステータス' %></th>
+      <td><%= @task.status %></td>
+    </tr>
+    <tr>
+      <th><%= '優先度' %></th>
+      <td><%= @task.priority %></td>
+    </tr>
+    <tr>
+      <th><%= 'タスク名' %></th>
+      <td><%= @task.name %></td>
+    </tr>
+    <tr>
+      <th><%= '終了期限' %></th>
+      <td><%= l @task.deadline %></td>
+    </tr>
+  </table>
 </div>
