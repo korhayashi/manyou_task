@@ -24,6 +24,61 @@ RSpec.describe 'タスク管理機能', type: :system do
         # expectの結果が true ならテスト成功、false なら失敗として結果が出力される
       end
     end
+    context 'scopeメソッドで検索をした場合' do
+      before do
+        task2 = FactoryBot.create(:second_task, name: 'task2')
+        task3 = FactoryBot.create(:third_task, name: 'task3')
+      end
+
+      it "scopeメソッドでタイトル検索ができる" do
+        visit root_path
+        fill_in 'search_word', with: 'task'
+        click_on '検索'
+        # expect(Task.get_by_taskname('task').count).to eq 1
+        expect(page).to have_content 'task'
+      end
+      it "scopeメソッドでステータス検索ができる" do
+        visit root_path
+        select '着手中', from: 'search_status'
+        click_on '検索'
+        expect(page).to have_content 'task2'
+      end
+      it "scopeメソッドで優先度検索ができる" do
+        visit root_path
+        select '低', from: 'search_priority'
+        click_on '検索'
+        expect(page).to have_content 'task'
+      end
+      it "scopeメソッドでタイトルとステータスの両方が検索できる" do
+        visit root_path
+        fill_in 'search_word', with: 'task3'
+        select '完了', from: 'search_status'
+        click_on '検索'
+        expect(page).to have_content 'task3'
+      end
+      it "scopeメソッドでタイトルと優先度の両方が検索できる" do
+        visit root_path
+        fill_in 'search_word', with: 'task3'
+        select '高', from: 'search_priority'
+        click_on '検索'
+        expect(page).to have_content 'task3'
+      end
+      it "scopeメソッドでステータスと優先度の両方が検索できる" do
+        visit root_path
+        select '完了', from: 'search_status'
+        select '高', from: 'search_priority'
+        click_on '検索'
+        expect(page).to have_content 'task3'
+      end
+      it "scopeメソッドでタイトルとステータス、優先度すべてが検索できる" do
+        visit root_path
+        fill_in 'search_word', with: 'task'
+        select '未着手', from: 'search_status'
+        select '低', from: 'search_priority'
+        click_on '検索'
+        expect(page).to have_content 'task'
+      end
+    end
     context '複数のタスクを作成した場合' do
       it 'タスクが作成日時の降順に並んでいる' do
         # あらかじめタスク並び替えの確認テストで使用するためのタスクを二つ作成する
@@ -34,6 +89,20 @@ RSpec.describe 'タスク管理機能', type: :system do
         task_list = all('.task_row') # タスク一覧を配列として取得するため、View側でidを振っておく
         expect(task_list[0]).to have_content 'new_task'
         expect(task_list[1]).to have_content 'task'
+      end
+    end
+    context '終了期限を昇順にソート' do
+      it 'タスクが終了期限の昇順に並んでいる' do
+        # あらかじめタスク並び替えの確認テストで使用するためのタスクを二つ作成する
+        new_task = FactoryBot.create(:second_task, name: 'slow_task')
+        visit root_path
+        # ソートのプルダウンを終了期限が早い順に指定
+        # binding.irb
+        select '終了期限が早い順', from: 'sort'
+        click_button 'ソート'
+        task_list = all('.task_row') # タスク一覧を配列として取得するため、View側でidを振っておく
+        expect(task_list[0]).to have_content 'task'
+        expect(task_list[1]).to have_content 'slow_task'
       end
     end
   end
