@@ -1,0 +1,9 @@
+<% if variable.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+    <% variable.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>

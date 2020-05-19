@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :not_logged_in
 
   def index
     @task = Task.new
@@ -11,8 +12,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params)
-    # binding.irb
+    @task = current_user.tasks.build(task_params)
     if @task.save
       redirect_to root_path, notice: '新しいタスクを登録しました'
     else
@@ -91,5 +91,11 @@ class TasksController < ApplicationController
 
   def set_task
     @task = Task.find(params[:id])
+  end
+
+  def forget_user
+    if current_user.id != @task.user_id
+      redirect_to root_path
+    end
   end
 end
