@@ -9,4 +9,5 @@ class User < ApplicationRecord
                     format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i },
                     uniqueness: true
   validates :password, presence: true
+  validates :password, length: { minimum: 1 }, allow_blank: true, on: :update
 end

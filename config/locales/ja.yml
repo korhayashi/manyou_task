@@ -3,10 +3,19 @@ ja:
   activerecord:
     models:
       task: タスク
+      user: ユーザー
     attributes:
       task:
         name: タスク名
         detail: タスク詳細
+        deadline: 終了期限
+        status: ステータス
+        priority: 優先度
+      user:
+        name: 名前
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード（確認）
     errors:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'
