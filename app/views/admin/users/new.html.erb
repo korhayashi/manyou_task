@@ -19,6 +19,11 @@
         <td><%= f.password_field :password_confirmation %></td>
       </tr>
       <tr>
+        <td><%= f.label :admin, '管理者' %></td>
+        <%= f.hidden_field :admin, value: false %>
+        <td><%= f.check_box :admin, {}, true, false %></td>
+      </tr>
+      <tr>
         <td>&nbsp;</td>
         <td><%= f.submit '登録' %></td>
       <tr>

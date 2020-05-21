@@ -11,11 +11,13 @@ ja:
         deadline: 終了期限
         status: ステータス
         priority: 優先度
+        user_id: ユーザーID
       user:
         name: 名前
         email: メールアドレス
         password: パスワード
         password_confirmation: パスワード（確認）
+        admin: 管理者
     errors:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'

@@ -10,6 +10,11 @@
         <td><%= f.label :email, 'メールアドレス' %></td>
         <td><%= f.email_field :email %></td>
       </tr>
+      <tr>
+        <td><%= f.label :admin, '管理者' %></td>
+        <%= f.hidden_field :admin, value: false %>
+        <td><%= f.check_box :admin, {}, true, false %></td>
+      </tr>
     </table>
     <hr>
     <p>パスワードを変更する場合は以下も入力してください</p>
