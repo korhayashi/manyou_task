@@ -17,15 +17,15 @@ class User < ApplicationRecord
   private
 
   def destroy_action
-    user = User.where(id: self.id, admin: true)
-    if user.present? && User.where(admin: true).count == 1 && self.admin == false
+    if User.where(admin: true).count == 1 && self.admin
       throw(:abort)
     end
   end
 
   def update_action
     user = User.where(id: self.id, admin: true)
-    if user.present? && User.where(admin: true).count == 1 && self.admin == false
+    if User.where(admin: true).count == 1 && user
+      # binding.irb
       errors.add(:admin, 'から外せません。最低一人の管理者が必要です')
       throw(:abort)
     end

@@ -4,7 +4,7 @@ class TasksController < ApplicationController
 
   def index
     @task = Task.new
-    @tasks = Task.all.order(created_at: :desc).kaminari(params[:page])
+    @tasks = current_user.tasks.sorted.kaminari(params[:page])
   end
 
   def new
