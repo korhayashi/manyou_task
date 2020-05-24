@@ -1,0 +1,32 @@
+<div class="container">
+  <%= form_with(model: [:admin, @user], local: true) do |f| %>
+    <%= render 'common/error', variable: @user %>
+    <table>
+      <tr>
+        <td><%= f.label :name, '名前' %></td>
+        <td><%= f.text_field :name %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :email, 'メールアドレス' %></td>
+        <td><%= f.email_field :email %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :password, 'パスワード' %></td>
+        <td><%= f.password_field :password %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :password_confirmation, 'パスワード確認' %></td>
+        <td><%= f.password_field :password_confirmation %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :admin, '管理者' %></td>
+        <%= f.hidden_field :admin, value: false %>
+        <td><%= f.check_box :admin, {}, true, false %></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><%= f.submit '登録' %></td>
+      <tr>
+    </table>
+  <% end %>
+</div>

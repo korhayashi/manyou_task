@@ -1,14 +1,6 @@
 <div class="task_form">
   <%= form_with(model: @task, local: true) do |f| %>
-    <% if @task.errors.any? %>
-      <div id="error_explanation">
-        <ul>
-        <% @task.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <%= render 'common/error', variable: @task %>
     <div class="form_name">
       <%= f.label :name, '名前' %>
       <%= f.text_field :name %>

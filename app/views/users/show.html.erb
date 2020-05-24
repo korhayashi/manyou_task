@@ -1,0 +1,40 @@
+<div class="container">
+  <h4><%= @user.name %>のページ</h4>
+  <% if @tasks.present? %>
+    <div class="user_tasks">
+      <% @tasks.each do |task| %>
+        <div class="task">
+          <div class="task_header">
+            <div class="task_status">
+              <%= task.status %>
+            </div>
+            <h4 class="task_name task_row"><%= task.name %></h4>
+            <div class="task_priority">
+              <%= task.priority %>
+            </div>
+            <%= link_to '詳細', task_path(task.id), class: 'task_show' %>
+            <%= link_to '編集', edit_task_path(task.id) %>
+            <%= link_to '削除', task_path(task.id), method: :delete, data: { confirm: '削除してよろしいですか？' } %>
+          </div>
+          <div class="task_detail">
+            <%= task.detail %>
+          </div>
+          <div class="task_deadline">
+            <% deadline_date = task.deadline.to_date %>
+            <% num = (deadline_date - Date.today).to_i %>
+            <% if num.negative? %>
+              <%= '終了期限を過ぎています' %>
+            <% else %>
+              <%= "あと#{num}日" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <%= '当ユーザーの作成したタスクはありません' %>
+  <% end %>
+  <div class="page">
+    <%= paginate @tasks %>
+  </div>
+</div>

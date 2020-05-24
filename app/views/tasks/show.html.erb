@@ -1,4 +1,13 @@
 <div class="container">
+  <div class="task_deadline show_task_deadline">
+    <% deadline_date = @task.deadline.to_date %>
+    <% num = (deadline_date - Date.today).to_i %>
+    <% if num.negative? %>
+      <%= 'このタスクは終了期限を過ぎています' %>
+    <% else %>
+      <%= "あと#{num}日" %>
+    <% end %>
+  </div>
   <table>
     <tr>
       <th><%= 'タスク名' %></th>

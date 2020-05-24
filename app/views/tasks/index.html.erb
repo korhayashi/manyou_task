@@ -38,9 +38,13 @@
           <%= task.detail %>
         </div>
         <div class="task_deadline">
-          <%#= "あと#{(task.deadline - DateTime.now).to_i}日" %>
-          <%= '期限:' %>
-          <%= l task.deadline %>
+          <% deadline_date = task.deadline.to_date %>
+          <% num = (deadline_date - Date.today).to_i %>
+          <% if num.negative? %>
+            <%= '終了期限を過ぎています' %>
+          <% else %>
+            <%= "あと#{num}日" %>
+          <% end %>
         </div>
       </div>
     <% end %>
