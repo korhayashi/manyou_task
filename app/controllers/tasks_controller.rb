@@ -3,6 +3,7 @@ class TasksController < ApplicationController
   before_action :not_logged_in
 
   def index
+    # binding.irb
     @task = Task.new
     @tasks = current_user.tasks.sorted.kaminari(params[:page])
   end
@@ -51,6 +52,7 @@ class TasksController < ApplicationController
   end
 
   def search
+    @search_word = params[:search_word]
     # binding.irb
     @tasks =
     if params[:search_word].blank? && params[:search_status].blank? && params[:search_priority].blank?
@@ -98,4 +100,8 @@ class TasksController < ApplicationController
       redirect_to root_path
     end
   end
+
+  # def params_search_word
+  #   params.fetch(:search_word, {})
+  # end
 end
