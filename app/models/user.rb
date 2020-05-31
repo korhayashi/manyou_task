@@ -25,7 +25,7 @@ class User < ApplicationRecord
   def update_action
     user = User.where(id: self.id).where(admin: true)
     # binding.irb
-    if User.where(admin: true).count == 1 && user == present?
+    if User.where(admin: true).count == 1 && user.present? && self.admin == false
       errors.add(:admin, 'から外せません。最低一人の管理者が必要です')
       throw(:abort)
     end

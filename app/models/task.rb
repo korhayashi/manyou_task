@@ -26,5 +26,5 @@ class Task < ApplicationRecord
   # 重要度でソート
   scope :priority_sort, -> (search_priority){ where(priority: search_priority) }
   # kaminari関連
-  scope :kaminari, -> (kaminari_page){ page(kaminari_page).per(2) }
+  scope :kaminari, -> (kaminari_page){ page(kaminari_page).per(5) }
 end
