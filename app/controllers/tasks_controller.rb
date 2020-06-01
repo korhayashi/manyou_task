@@ -10,10 +10,12 @@ class TasksController < ApplicationController
 
   def new
     @task = Task.new
+    @label = @task.labelings.build
   end
 
   def create
     @task = current_user.tasks.build(task_params)
+    binding.irb
     if @task.save
       redirect_to root_path, notice: '新しいタスクを登録しました'
     else
@@ -87,7 +89,9 @@ class TasksController < ApplicationController
       :name,
       :detail,
       :deadline,
-      :status
+      :status,
+      :priority,
+      label_ids: []
     )
   end
 
