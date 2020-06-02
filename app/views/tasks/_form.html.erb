@@ -31,7 +31,7 @@
       <% Label.all.each do |label| %>
         <%= f.check_box :label_ids, { multiple: true, checked: @task.labels.find_by(id: label.id).present?,  disabled: label[:disabled], include_hidden: false }, label[:id] %>
         <%#= f.collection_check_boxes(:label_ids, Label.all, :id, :name) %>
-        <span class="labe"><%= label.name %></span>
+        <span class="label"><%= label.name %></span>
       <% end %>
     </div>
     <div class="form_submit">
