@@ -8,12 +8,15 @@
     <% end %>
       <%= f.select :search_status, Task.statuses.map { |k, v| [k, v] }, class: 'search_status', prompt: 'ステータス' %>
       <%= f.select :search_priority, Task.priorities.map { |k, v| [k, v] }, class: 'search_priority', prompt: '優先度' %>
-      <%= f.select :search_label, Label.all.collect { |p| [p.name, p.id]}, class: "search_label", prompt: 'ラベル' %>
+      <%= f.select :search_label, @labels.collect { |p| [p.name, p.id]}, class: "search_label", prompt: 'ラベル' %>
       <%= f.submit '検索' %>
     <%# end %>
   </div>
   <div class="new_post">
     <%= link_to '新規タスク登録', new_task_path %>
+  </div>
+  <div class="new_label">
+    <%= link_to '新規ラベル作成', new_label_path %>
   </div>
   <div class="sort">
     <%#= form_with(url: sort_tasks_path, method: :get, local: true) do |f| %>

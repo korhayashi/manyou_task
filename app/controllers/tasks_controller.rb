@@ -4,18 +4,19 @@ class TasksController < ApplicationController
 
   def index
     # binding.irb
-    @task = Task.new
     @tasks = current_user.tasks.sorted.kaminari(params[:page])
+    @labels = Label.where(user_id: nil).or(Label.where(user_id: current_user.id))
   end
 
   def new
     @task = Task.new
     @label = @task.labelings.build
+    @labels = Label.where(user_id: nil).or(Label.where(user_id: current_user.id))
   end
 
   def create
     @task = current_user.tasks.build(task_params)
-    binding.irb
+    # binding.irb
     if @task.save
       redirect_to root_path, notice: '新しいタスクを登録しました'
     else
@@ -27,11 +28,12 @@ class TasksController < ApplicationController
   end
 
   def edit
+    @labels = Label.where(user_id: nil).or(Label.where(user_id: current_user.id))
   end
 
   def update
     if @task.update(task_params)
-      redirect_to tasks_path, notice: 'タスクを変更しました'
+      redirect_to root_path, notice: 'タスクを変更しました'
     else
       render :edit
     end
@@ -42,20 +44,10 @@ class TasksController < ApplicationController
     redirect_to tasks_path, notice: 'タスクを削除しました'
   end
 
-  # def sort
-  #   @tasks =
-  #     if params[:sort] == 'created_at'
-  #       Task.current_user_sort(current_user.id).order(created_at: :desc).kaminari(params[:page])
-  #     elsif params[:sort] == 'deadline'
-  #       Task.current_user_sort(current_user.id).order(deadline: :asc).kaminari(params[:page])
-  #     end
-  #
-  #     render :index
-  # end
-
   def search
     @search_word = params[:search_word]
     # binding.irb
+    @labels = Label.where(user_id: nil).or(Label.where(user_id: current_user.id))
     @tasks =
     # 全ての検索が空だったら
     if params[:search_word].blank? && params[:search_status].blank? && params[:search_priority].blank? && params[:search_label].blank?
