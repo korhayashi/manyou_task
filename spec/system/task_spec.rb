@@ -1,10 +1,22 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
+  def user_login
+    visit new_session_path
+    fill_in 'session[email]', with: 'sample@example.com'
+    fill_in 'session[password]', with: '00000000'
+    click_button 'ログイン'
+  end
+
   before do
     # 「タスク一覧画面」や「タスク詳細画面」などそれぞれのテストケースで、before内のコードが実行される
     # 各テストで使用するタスクを1件作成する
     # 作成したタスクオブジェクトを各テストケースで呼び出せるようにインスタンス変数に代入
-    @task = FactoryBot.create(:task, name: 'task')
+    @label1 = FactoryBot.create(:label)
+    @label2 = FactoryBot.create(:second_label)
+    @user = FactoryBot.create(:user)
+    @admin_user = FactoryBot.create(:admin_user)
+
+    user_login
   end
   # background do
   #   # あらかじめタスク一覧のテストで使用するためのタスクを二つ作成する
@@ -12,8 +24,16 @@ RSpec.describe 'タスク管理機能', type: :system do
   #   FactoryBot.create(:second_task)
   # end
   describe 'タスク一覧画面' do
+    before do
+      @task = FactoryBot.create(:task, name: 'task')
+      @task2 = FactoryBot.create(:second_task, name: 'task2')
+      @task3 = FactoryBot.create(:third_task, name: 'task3')
+      @labeling1 = FactoryBot.create(:labeling)
+      @labeling2 = FactoryBot.create(:second_labeling)
+    end
     context 'タスクを作成した場合' do
       it '作成済みのタスクが表示される' do
+        binding.irb
         # テストで使用するためのタスクを作成
         # task = FactoryBot.create(:task, name: 'task')
         # タスク一覧ページに遷移
@@ -25,11 +45,6 @@ RSpec.describe 'タスク管理機能', type: :system do
       end
     end
     context 'scopeメソッドで検索をした場合' do
-      before do
-        task2 = FactoryBot.create(:second_task, name: 'task2')
-        task3 = FactoryBot.create(:third_task, name: 'task3')
-      end
-
       it "scopeメソッドでタイトル検索ができる" do
         visit root_path
         fill_in 'search_word', with: 'task'
@@ -115,23 +130,24 @@ RSpec.describe 'タスク管理機能', type: :system do
         # 「タスク名」というラベル名の入力欄と、「タスク詳細」というラベル名の入力欄に
         # タスクのタイトルと内容をそれぞれfill_in（入力）する
         # 2.ここに「タスク名」というラベル名の入力欄に内容をfill_in（入力）する処理を書く
-        fill_in '名前', with: 'task2'
+        fill_in '名前', with: 'task'
         # 3.ここに「タスク詳細」というラベル名の入力欄に内容をfill_in（入力）する処理を書く
-        fill_in '詳細', with: 'task2 detail'
+        fill_in '詳細', with: 'task detail'
         # 「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
         # 4.「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）する処理を書く
+        check 'task_label_ids_1'
+        check 'task_label_ids_3'
         click_on '登録'
         # clickで登録されたはずの情報が、タスク詳細ページに表示されているかを確認する
         # （タスクが登録されたらタスク詳細画面に遷移されるという前提）
         # 5.タスク詳細ページに、テストコードで作成したはずのデータ（記述）がhave_contentされているか（含まれているか）を確認（期待）するコードを書く
-        expect(page).to have_content 'task2'
+        expect(page).to have_content 'task'
       end
     end
   end
   describe 'タスク詳細画面' do
      context '任意のタスク詳細画面に遷移した場合' do
        it '該当タスクの内容が表示されたページに遷移する' do
-         # task = FactoryBot.create(:task, name: 'task')
          visit root_path
          click_on '詳細'
          expect(page).to have_content 'task'
