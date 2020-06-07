@@ -10,7 +10,7 @@
       <%= f.select :search_priority, Task.priorities.map { |k, v| [k, v] }, class: 'search_priority', prompt: '優先度' %>
       <%= f.select :search_label, @labels.collect { |p| [p.name, p.id]}, class: "search_label", prompt: 'ラベル' %>
       <%= f.submit '検索' %>
-    <%# end %>
+    <% end %>
   </div>
   <div class="new_post">
     <%= link_to '新規タスク登録', new_task_path %>
@@ -19,7 +19,7 @@
     <%= link_to '新規ラベル作成', new_label_path %>
   </div>
   <div class="sort">
-    <%#= form_with(url: sort_tasks_path, method: :get, local: true) do |f| %>
+    <%= form_with(url: sort_tasks_path, method: :get, local: true) do |f| %>
       <%= f.select :sort, options_for_select([["投稿が新しい順","created_at"],["終了期限が早い順","deadline"]]),
         { class: 'sort_select' } %>
       <%= f.submit "ソート" %>

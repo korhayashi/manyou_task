@@ -45,74 +45,31 @@ class TasksController < ApplicationController
   end
 
   def search
-    @search_word = params[:search_word]
     # binding.irb
+    session[:search] = {'word' => params[:search_word], 'status' => params[:search_status], 'priority' => params[:search_priority], 'label' => params[:search_label]}
+    @labels = Label.where(user_id: nil).or(Label.where(user_id: current_user.id))
+    @tasks = searched.sorted
+    @search_word = session[:search]['word']
+    # binding.irb
+
+    render :index
+    # binding.irb
+  end
+
+  def sort
+    @tasks = searched
+    # binding.irb
+
+    @search_word = session[:search]['word']
     @labels = Label.where(user_id: nil).or(Label.where(user_id: current_user.id))
     @tasks =
-    # 全ての検索が空だったら
-    if params[:search_word].blank? && params[:search_status].blank? && params[:search_priority].blank? && params[:search_label].blank?
-      Task.current_user_sort(current_user.id).kaminari(params[:page])
-    # ワードが入力されていて
-    elsif params[:search_word].present?
-      # ステータス、優先度、ラベルが指定されていたら
-      if params[:search_status].present? && params[:search_priority].present? && params[:search_label].present?
-        Task.current_user_sort(current_user.id).search_sort(params[:search_word]).status_sort(params[:search_status]).priority_sort(params[:search_priority]).label_sort(params[:search_label]).kaminari(params[:page])
-      # ステータス、優先度が指定されていたら
-      elsif params[:search_status].present? && params[:search_priority].present?
-        Task.current_user_sort(current_user.id).search_sort(params[:search_word]).status_sort(params[:search_status]).priority_sort(params[:search_priority]).kaminari(params[:page])
-      # ステータス、ラベルが指定されていたら
-      elsif params[:search_status].present? && params[:search_label].present? && params[:search_priority].blank?
-        Task.current_user_sort(current_user.id).search_sort(params[:search_word]).status_sort(params[:search_status]).label_sort(params[:search_label]).kaminari(params[:page])
-      # 優先度、ラベルが指定されていたら
-      elsif params[:search_priority].present? && params[:search_label].present? && params[:search_status].blank?
-        Task.current_user_sort(current_user.id).search_sort(params[:search_word]).priority_sort(params[:search_priority]).label_sort(params[:search_label]).kaminari(params[:page])
-      # ステータスのみ指定されていたら
-      elsif params[:search_status].present? && params[:search_priority].blank? && params[:search_label].blank?
-        Task.current_user_sort(current_user.id).search_sort(params[:search_word]).status_sort(params[:search_status]).kaminari(params[:page])
-      # 優先度のみ指定されていたら
-      elsif params[:search_priority].present? && params[:search_status].blank? && params[:search_label].blank?
-        Task.current_user_sort(current_user.id).search_sort(params[:search_word]).priority_sort(params[:search_priority]).kaminari(params[:page])
-      # ラベルのみ指定されていたら
-      elsif params[:search_label].present? && parans[:search_status].blank? && params[:search_priority].blank?
-        Task.current_user_sort(current_user.id).search_sort(params[:search_word]).label_sort(params[:search_label]).kaminari(params[:page])
-      # ワードのみ
-      else
-        Task.current_user_sort(current_user.id).search_sort(params[:search_word]).kaminari(params[:page])
+      if params[:sort] == 'created_at'
+        @tasks.sorted
+      elsif params[:sort] == 'deadline'
+        @tasks.deadline_sorted
       end
-    # ワードが空、かつステータスが指定されていて
-    elsif params[:search_status].present?
-      # 優先度、ラベルが指定されていたら
-      if params[:search_priority].present? && params[:search_label].present?
-        Task.current_user_sort(current_user.id).status_sort(params[:search_status]).priority_sort(params[:search_priority]).label_sort(params[:search_label]).kaminari(params[:page])
-      # 優先度のみ指定されていたら
-      elsif params[:search_priority].present? && params[:search_label].blank?
-        Task.current_user_sort(current_user.id).status_sort(params[:search_status]).label_sort(params[:search_label]).kaminari(params[:page])
-      # ラベルのみ指定されていたら
-      elsif params[:search_label].present? && params[:search_priority].blank?
-        Task.current_user_sort(current_user.id).status_sort(params[:search_status]).label_sort(params[:search_label]).kaminari(params[:page])
-      # ステータスのみ
-      else
-        Task.current_user_sort(current_user.id).status_sort(params[:search_status]).kaminari(params[:page])
-      end
-    # ワード、ステータスが空、かつ優先度が指定されていて
-    elsif params[:search_priority].present?
-      # ラベルが指定されていたら
-      if params[:search_label].present?
-        Task.current_user_sort(current_user.id).priority_sort(params[:search_priority]).label_sort(params[:search_label]).kaminari(params[:page])
-      # 優先度のみ
-      else
-        Task.current_user_sort(current_user.id).priority_sort(params[:search_priority]).kaminari(params[:page])
-      end
-    # ワード、ステータス、優先度が空、かつラベルが指定されていたら
-    elsif params[:search_label].present?
-      Task.current_user_sort(current_user.id).label_sort(params[:search_label]).kaminari(params[:page])
-    end
 
-    if params[:sort] == 'created_at'
-      @tasks.sorted
-    elsif params[:sort] == 'deadline'
-      @tasks.deadline_sorted
-    end
+    session[:search] = nil
 
     render :index
   end
@@ -140,7 +97,64 @@ class TasksController < ApplicationController
     end
   end
 
-  # def params_search_word
-  #   params.fetch(:search_word, {})
-  # end
+  def searched
+    # 全ての検索が空だったら
+    if session[:search]['word'].blank? && session[:search]['status'].blank? && session[:search]['priority'].blank? && session[:search]['label'].blank?
+      Task.current_user_sort(current_user.id).kaminari(params[:page])
+    # ワードが入力されていて
+    elsif session[:search]['word'].present?
+      # ステータス、優先度、ラベルが指定されていたら
+      if session[:search]['status'].present? && session[:search]['priority'].present? && session[:search]['label'].present?
+        Task.current_user_sort(current_user.id).search_sort(session[:search]['word']).status_sort(session[:search]['status']).priority_sort(session[:search]['priority']).label_sort(session[:search]['label']).kaminari(params[:page])
+      # ステータス、優先度が指定されていたら
+      elsif session[:search]['status'].present? && session[:search]['priority'].present?
+        Task.current_user_sort(current_user.id).search_sort(session[:search]['word']).status_sort(session[:search]['status']).priority_sort(session[:search]['priority']).kaminari(params[:page])
+      # ステータス、ラベルが指定されていたら
+      elsif session[:search]['status'].present? && session[:search]['label'].present? && session[:search]['priority'].blank?
+        Task.current_user_sort(current_user.id).search_sort(session[:search]['word']).status_sort(session[:search]['status']).label_sort(session[:search]['label']).kaminari(params[:page])
+      # 優先度、ラベルが指定されていたら
+      elsif session[:search]['priority'].present? && session[:search]['label'].present? && session[:search]['status'].blank?
+        Task.current_user_sort(current_user.id).search_sort(session[:search]['word']).priority_sort(session[:search]['priority']).label_sort(session[:search]['label']).kaminari(params[:page])
+      # ステータスのみ指定されていたら
+      elsif session[:search]['status'].present? && session[:search]['priority'].blank? && session[:search]['label'].blank?
+        Task.current_user_sort(current_user.id).search_sort(session[:search]['word']).status_sort(session[:search]['status']).kaminari(params[:page])
+      # 優先度のみ指定されていたら
+      elsif session[:search]['priority'].present? && session[:search]['status'].blank? && session[:search]['label'].blank?
+        Task.current_user_sort(current_user.id).search_sort(session[:search]['word']).priority_sort(session[:search]['priority']).kaminari(params[:page])
+      # ラベルのみ指定されていたら
+      elsif session[:search]['label'].present? && session[:search]['status'].blank? && session[:search]['priority'].blank?
+        Task.current_user_sort(current_user.id).search_sort(session[:search]['word']).label_sort(session[:search]['label']).kaminari(params[:page])
+      # ワードのみ
+      else
+        Task.current_user_sort(current_user.id).search_sort(session[:search]['word']).kaminari(params[:page])
+      end
+    # ワードが空、かつステータスが指定されていて
+    elsif session[:search]['status'].present?
+      # 優先度、ラベルが指定されていたら
+      if session[:search]['priority'].present? && session[:search]['label'].present?
+        Task.current_user_sort(current_user.id).status_sort(session[:search]['status']).priority_sort(session[:search]['priority']).label_sort(session[:search]['label']).kaminari(params[:page])
+      # 優先度のみ指定されていたら
+      elsif session[:search]['priority'].present? && session[:search]['label'].blank?
+        Task.current_user_sort(current_user.id).status_sort(session[:search]['status']).priority_sort(session[:search]['priority']).kaminari(params[:page])
+      # ラベルのみ指定されていたら
+      elsif session[:search]['label'].present? && session[:search]['priority'].blank?
+        Task.current_user_sort(current_user.id).status_sort(session[:search]['status']).label_sort(session[:search]['label']).kaminari(params[:page])
+      # ステータスのみ
+      else
+        Task.current_user_sort(current_user.id).status_sort(session[:search]['status']).kaminari(params[:page])
+      end
+    # ワード、ステータスが空、かつ優先度が指定されていて
+    elsif session[:search]['priority'].present?
+      # ラベルが指定されていたら
+      if session[:search]['label'].present?
+        Task.current_user_sort(current_user.id).priority_sort(session[:search]['priority']).label_sort(session[:search]['label']).kaminari(params[:page])
+      # 優先度のみ
+      else
+        Task.current_user_sort(current_user.id).priority_sort(session[:search]['priority']).kaminari(params[:page])
+      end
+    # ワード、ステータス、優先度が空、かつラベルが指定されていたら
+    elsif session[:search]['label'].present?
+      Task.current_user_sort(current_user.id).label_sort(session[:search]['label']).kaminari(params[:page])
+    end
+  end
 end
