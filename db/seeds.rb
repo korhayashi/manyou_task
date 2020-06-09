@@ -7,7 +7,7 @@
     email: email,
     password: password,
     password_confirmation: password,
-    admin: false;
+    admin: false
   )
 end
 
@@ -26,7 +26,7 @@ end
     deadline: DateTime.now + 10,
     status: rand(3),
     priority: rand(3),
-    user_id: rand(12),
+    user_id: rand(12)
   )
 end
 
