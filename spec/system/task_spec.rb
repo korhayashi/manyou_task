@@ -150,6 +150,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in '詳細', with: 'new task detail'
         # 「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
         # 4.「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）する処理を書く
+        check 'task_label_ids_1'
         click_on '登録'
         # clickで登録されたはずの情報が、タスク詳細ページに表示されているかを確認する
         # （タスクが登録されたらタスク詳細画面に遷移されるという前提）
