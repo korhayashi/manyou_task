@@ -66,7 +66,6 @@ RSpec.describe 'タスク管理機能', type: :system do
       it "scopeメソッドでラベル検索ができる" do
         visit root_path
         select 'A', from: 'search_label'
-        binding.irb
         click_on '検索'
         expect(page).to have_content 'task'
       end
@@ -94,11 +93,12 @@ RSpec.describe 'タスク管理機能', type: :system do
         # binding.irb
         expect(page).to have_content 'task'
       end
-      it "scopeメソッドでタイトルとステータス、優先度すべてが検索できる" do
+      it "scopeメソッドでタイトルとステータス、優先度、ラベルすべてが検索できる" do
         visit root_path
         fill_in 'search_word', with: 'task'
         select '未着手', from: 'search_status'
         select '低', from: 'search_priority'
+        select 'A', from: 'search_label'
         sleep 1
         click_on '検索'
         expect(page).to have_content 'task'
