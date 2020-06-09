@@ -41,6 +41,8 @@ gem 'kaminari', '~> 0.17.0'
 
 gem 'bcrypt', '3.1.11'
 
+gem 'faker'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -49,7 +51,6 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.8'
   gem 'spring-commands-rspec'
   gem 'factory_bot_rails'
-  gem 'faker'
   gem 'launchy'
 end
 
