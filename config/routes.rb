@@ -1,13 +1,9 @@
 Rails.application.routes.draw do
-  namespace :admin do
-    get 'users/new'
-  end
-  get 'sessions/new'
   root 'tasks#index'
 
   resources :tasks, except: [:index] do
     collection do
-      post :sort
+      get :sort
       get :search
     end
   end
@@ -18,4 +14,6 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :users, except: [:show]
   end
+
+  resources :labels, only: [:new, :create]
 end

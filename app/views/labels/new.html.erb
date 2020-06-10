@@ -1,0 +1,11 @@
+<div class="container">
+  <%= form_with(model: @label, local: true) do |f| %>
+    <div class="label_form_name">
+      <%= f.label :name, 'ラベル名' %>
+      <%= f.text_field :name %>
+    </div>
+    <div class="label_form_submit">
+      <%= f.submit '登録' %>
+    </div>
+  <% end %>
+</div>

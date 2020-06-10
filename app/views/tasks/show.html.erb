@@ -25,10 +25,16 @@
       <th><%= '優先度' %></th>
       <td><%= @task.priority %></td>
     </tr>
-    <tr>
-      <th><%= 'タスク名' %></th>
-      <td><%= @task.name %></td>
-    </tr>
+    <% if @task.labels.present? %>
+      <tr>
+        <th><%= 'ラベル' %></th>
+        <td>
+          <% @task.labels.each do |l| %>
+            <span class="label"><%= l.name %></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
     <tr>
       <th><%= '終了期限' %></th>
       <td><%= l @task.deadline %></td>

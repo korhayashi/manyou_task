@@ -27,6 +27,12 @@
       <%= f.label :priority, '優先度' %>
       <%= f.select :priority, Task.priorities.keys %>
     </div>
+    <div class="form_labels">
+      <% @labels.each do |label| %>
+        <%= f.check_box :label_ids, { multiple: true, checked: @task.labels.find_by(id: label.id).present?,  disabled: label[:disabled], include_hidden: false }, label[:id] %>
+        <span class="label"><%= label.name %></span>
+      <% end %>
+    </div>
     <div class="form_submit">
       <%= f.submit '登録' %>
     </div>
